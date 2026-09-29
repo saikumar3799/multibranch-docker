@@ -1,0 +1,192 @@
+{% extends "base.html" %}
+
+{% block page_title %}
+Students
+{% endblock %}
+
+
+{% block content %}
+
+<div class="page-actions">
+
+    <form method="GET"
+          class="search-form">
+
+        <input
+            type="text"
+            name="search"
+            placeholder="Search student..."
+            value="{{ search }}"
+        >
+
+        <button type="submit">
+            Search
+        </button>
+
+    </form>
+
+</div>
+
+
+<div class="card">
+
+    <div class="card-header">
+
+        <h2>Add Student</h2>
+
+    </div>
+
+
+    <form method="POST"
+          action="{{ url_for('add_student') }}"
+          class="student-form">
+
+        <input
+            type="text"
+            name="student_id"
+            placeholder="Student ID"
+            required
+        >
+
+        <input
+            type="text"
+            name="name"
+            placeholder="Student Name"
+            required
+        >
+
+        <input
+            type="text"
+            name="department"
+            placeholder="Department"
+            required
+        >
+
+        <input
+            type="email"
+            name="email"
+            placeholder="Email"
+        >
+
+        <input
+            type="text"
+            name="phone"
+            placeholder="Phone"
+        >
+
+        <button class="primary-btn"
+                type="submit">
+
+            Add Student
+
+        </button>
+
+    </form>
+
+</div>
+
+
+<div class="card">
+
+    <div class="card-header">
+
+        <h2>Student List</h2>
+
+        <span>
+            {{ students|length }} Students
+        </span>
+
+    </div>
+
+
+    <div class="table-container">
+
+        <table>
+
+            <thead>
+
+                <tr>
+
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Department</th>
+                    <th>Email</th>
+                    <th>Phone</th>
+                    <th>Action</th>
+
+                </tr>
+
+            </thead>
+
+
+            <tbody>
+
+                {% for student in students %}
+
+                <tr>
+
+                    <td>
+                        {{ student.student_id }}
+                    </td>
+
+                    <td>
+                        <strong>
+                            {{ student.name }}
+                        </strong>
+                    </td>
+
+                    <td>
+                        {{ student.department }}
+                    </td>
+
+                    <td>
+                        {{ student.email or "-" }}
+                    </td>
+
+                    <td>
+                        {{ student.phone or "-" }}
+                    </td>
+
+                    <td>
+
+                        <form method="POST"
+                              action="{{ url_for('delete_student', id=student.id) }}"
+                              onsubmit="return confirm('Delete this student?');">
+
+                            <button class="delete-btn"
+                                    type="submit">
+
+                                Delete
+
+                            </button>
+
+                        </form>
+
+                    </td>
+
+                </tr>
+
+                {% else %}
+
+                <tr>
+
+                    <td colspan="6"
+                        class="empty">
+
+                        No students found.
+
+                    </td>
+
+                </tr>
+
+                {% endfor %}
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</div>
+
+{% endblock %}
