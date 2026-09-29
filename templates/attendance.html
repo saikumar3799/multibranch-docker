@@ -1,0 +1,223 @@
+{% extends "base.html" %}
+
+{% block page_title %}
+Attendance
+{% endblock %}
+
+
+{% block content %}
+
+<div class="card">
+
+    <div class="card-header">
+
+        <h2>Mark Attendance</h2>
+
+        <form method="GET">
+
+            <input
+                type="date"
+                name="date"
+                value="{{ selected_date }}"
+                onchange="this.form.submit()"
+            >
+
+        </form>
+
+    </div>
+
+
+    <form method="POST"
+          action="{{ url_for('save_attendance') }}">
+
+        <input type="hidden"
+               name="attendance_date"
+               value="{{ selected_date }}">
+
+
+        <div class="attendance-list">
+
+            {% for student in students %}
+
+            <div class="attendance-row">
+
+                <div class="student-info">
+
+                    <div class="avatar">
+                        {{ student.name[0]|upper }}
+                    </div>
+
+                    <div>
+
+                        <strong>
+                            {{ student.name }}
+                        </strong>
+
+                        <span>
+                            {{ student.student_id }}
+                            ·
+                            {{ student.department }}
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <div class="attendance-buttons">
+
+                    <label>
+
+                        <input
+                            type="radio"
+                            name="status_{{ student.id }}"
+                            value="Present"
+
+                            {% if attendance_map.get(student.id) == "Present" %}
+                                checked
+                            {% endif %}
+                        >
+
+                        <span class="present-button">
+                            ✓ Present
+                        </span>
+
+                    </label>
+
+
+                    <label>
+
+                        <input
+                            type="radio"
+                            name="status_{{ student.id }}"
+                            value="Absent"
+
+                            {% if attendance_map.get(student.id) == "Absent" %}
+                                checked
+                            {% endif %}
+                        >
+
+                        <span class="absent-button">
+                            ✕ Absent
+                        </span>
+
+                    </label>
+
+                </div>
+
+            </div>
+
+            {% else %}
+
+            <div class="empty">
+
+                No students available.
+
+                <br><br>
+
+                <a href="{{ url_for('students') }}">
+                    Add students first
+                </a>
+
+            </div>
+
+            {% endfor %}
+
+        </div>
+
+
+        {% if students %}
+
+        <div class="save-area">
+
+            <button class="primary-btn"
+                    type="submit">
+
+                Save Attendance
+
+            </button>
+
+        </div>
+
+        {% endif %}
+
+    </form>
+
+</div>
+
+
+{% if report_data %}
+
+<div class="card">
+
+    <div class="card-header">
+
+        <h2>Attendance Report</h2>
+
+    </div>
+
+
+    <div class="table-container">
+
+        <table>
+
+            <thead>
+
+                <tr>
+
+                    <th>Student</th>
+                    <th>Total Days</th>
+                    <th>Present</th>
+                    <th>Absent</th>
+                    <th>Attendance %</th>
+
+                </tr>
+
+            </thead>
+
+
+            <tbody>
+
+                {% for item in report_data %}
+
+                <tr>
+
+                    <td>
+                        {{ item.student.name }}
+                    </td>
+
+                    <td>
+                        {{ item.total }}
+                    </td>
+
+                    <td>
+                        {{ item.present }}
+                    </td>
+
+                    <td>
+                        {{ item.absent }}
+                    </td>
+
+                    <td>
+
+                        <strong>
+                            {{ item.percentage }}%
+                        </strong>
+
+                    </td>
+
+                </tr>
+
+                {% endfor %}
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</div>
+
+{% endif %}
+
+{% endblock %}
