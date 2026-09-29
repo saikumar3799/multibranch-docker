@@ -1,0 +1,205 @@
+{% extends "base.html" %}
+
+{% block page_title %}
+Dashboard
+{% endblock %}
+
+
+{% block content %}
+
+<div class="welcome">
+
+    <div>
+
+        <h2>Smart Attendance Dashboard</h2>
+
+        <p>
+            Monitor attendance and manage your students.
+        </p>
+
+    </div>
+
+    <a class="primary-btn"
+       href="{{ url_for('attendance') }}">
+        Mark Attendance
+    </a>
+
+</div>
+
+
+<div class="stats">
+
+    <div class="stat-card">
+
+        <div class="stat-icon blue">
+            👥
+        </div>
+
+        <div>
+
+            <span>Total Students</span>
+
+            <strong>
+                {{ total_students }}
+            </strong>
+
+        </div>
+
+    </div>
+
+
+    <div class="stat-card">
+
+        <div class="stat-icon green">
+            ✓
+        </div>
+
+        <div>
+
+            <span>Present Today</span>
+
+            <strong>
+                {{ present_today }}
+            </strong>
+
+        </div>
+
+    </div>
+
+
+    <div class="stat-card">
+
+        <div class="stat-icon red">
+            ✕
+        </div>
+
+        <div>
+
+            <span>Absent Today</span>
+
+            <strong>
+                {{ absent_today }}
+            </strong>
+
+        </div>
+
+    </div>
+
+
+    <div class="stat-card">
+
+        <div class="stat-icon purple">
+            %
+        </div>
+
+        <div>
+
+            <span>Overall Attendance</span>
+
+            <strong>
+                {{ attendance_percentage }}%
+            </strong>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<div class="card">
+
+    <div class="card-header">
+
+        <h2>Recent Attendance</h2>
+
+        <a href="{{ url_for('attendance') }}">
+            View All
+        </a>
+
+    </div>
+
+
+    <div class="table-container">
+
+        <table>
+
+            <thead>
+
+                <tr>
+
+                    <th>Student</th>
+
+                    <th>Student ID</th>
+
+                    <th>Date</th>
+
+                    <th>Status</th>
+
+                </tr>
+
+            </thead>
+
+
+            <tbody>
+
+                {% for record in recent_attendance %}
+
+                <tr>
+
+                    <td>
+                        {{ record.student.name }}
+                    </td>
+
+                    <td>
+                        {{ record.student.student_id }}
+                    </td>
+
+                    <td>
+                        {{ record.attendance_date }}
+                    </td>
+
+                    <td>
+
+                        {% if record.status == "Present" %}
+
+                            <span class="badge present">
+                                Present
+                            </span>
+
+                        {% else %}
+
+                            <span class="badge absent">
+                                Absent
+                            </span>
+
+                        {% endif %}
+
+                    </td>
+
+                </tr>
+
+                {% else %}
+
+                <tr>
+
+                    <td colspan="4"
+                        class="empty">
+
+                        No attendance records yet.
+
+                    </td>
+
+                </tr>
+
+                {% endfor %}
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</div>
+
+{% endblock %}
